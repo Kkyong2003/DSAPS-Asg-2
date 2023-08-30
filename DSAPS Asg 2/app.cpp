@@ -10,6 +10,8 @@ using namespace std;
 
 bool readFile(const char *, BST *);
 int menu();
+bool Redundant(BST, Student);
+
 
 int main() {
 	do {
