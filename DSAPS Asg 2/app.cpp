@@ -17,6 +17,12 @@ int main() {
 
 		case 1: // Read data to BST
 
+			if (!readFile(filename, &stuTree)) {
+			cout << "Unable to read " << filename << endl;
+			}
+			else
+				cout << "Read successfully." << endl;
+			cout << endl;
 			system("pause");
 			system("cls");
 			break;
@@ -93,4 +99,95 @@ int menu() {
 		}
 	}
 	return option;
+}
+
+
+bool readFile(const char* filename, BST* t1) {
+
+	char s[256];
+	ifstream inFile;
+	inFile.open(filename);
+	Student student;
+
+	if (inFile.fail()) {
+		cout << "Unable to open the file" << endl;
+		return false;
+	}
+	else {
+		while (!inFile.eof()) {
+			for (int i = 0; i < 3; i++) {
+				inFile >> s;
+			}
+			inFile >> student.id;
+
+			for (int i = 0; i < 2; i++) {
+				inFile >> s;
+			}
+			inFile >> student.name;
+			inFile.getline(s, 256);
+			strcat_s(student.name, s);
+
+			for (int i = 0; i < 2; i++) {
+				inFile >> s;
+			}
+			inFile >> student.address;
+			inFile.getline(s, 256);
+			strcat_s(student.address, s);
+
+			for (int i = 0; i < 2; i++) {
+				inFile >> s;
+			}
+			inFile >> student.DOB;
+
+			for (int i = 0; i < 3; i++) {
+				inFile >> s;
+			}
+			inFile >> student.phone_no;
+
+			for (int i = 0; i < 2; i++) {
+				inFile >> s;
+			}
+			inFile >> student.course;
+
+			for (int i = 0; i < 2; i++) {
+				inFile >> s;
+			}
+			inFile >> student.cgpa;
+
+			if (!Redundant(*t1, student)) {
+				t1->insert(student);
+			}
+			else
+				cout << student.name << " already exist." << endl;
+		}
+		inFile.close();
+
+		cout << endl;
+		cout << "The number of student record successfully read: " << t1->countNode() << endl << endl;
+
+	}
+	
+	return true;
+}
+
+bool Redundant(BST stuTree, Student student)
+{
+	Student temp;
+	BTNode* cur;
+
+	if (stuTree.empty())
+		return false;
+
+	cur = stuTree.root;
+	while (cur != NULL) {
+		if (cur->item.compare2(student)) //if node value same as item, then return true
+			return true;
+
+		if (cur->item.compare2(student) > 0)
+			cur = cur->left;
+		else 
+			cur = cur->right;
+	}
+	
+	return false;
 }
